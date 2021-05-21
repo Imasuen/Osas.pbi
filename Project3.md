@@ -36,3 +36,44 @@ console.log(`Server running on port ${port}`)
 });
 
 ----created an inbound rule to open TCP port 5000.
+
+--Routes
+In Routes directory, i opened api.js with vim api.js, and deleted the code inside with :%d command and inputed the below code into it then save and exit
+const express = require ('express');
+const router = express.Router();
+const Todo = require('../models/todo');
+
+router.get('/todos', (req, res, next) => {
+
+//this will return all the data, exposing only the id and action field to the client
+Todo.find({}, 'action')
+.then(data => res.json(data))
+.catch(next)
+});
+
+router.post('/todos', (req, res, next) => {
+if(req.body.action){
+Todo.create(req.body)
+.then(data => res.json(data))
+.catch(next)
+}else {
+res.json({
+error: "The input field is empty"
+})
+}
+});
+
+router.delete('/todos/:id', (req, res, next) => {
+Todo.findOneAndDelete({"_id": req.params.id})
+.then(data => res.json(data))
+.catch(next)
+})
+
+module.exports = router;
+
+----created a mongodb 
+As ilustrated in the picture below:
+
+
+
+
